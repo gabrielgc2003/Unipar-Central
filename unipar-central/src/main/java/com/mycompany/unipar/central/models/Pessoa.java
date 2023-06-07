@@ -44,6 +44,8 @@ public class Pessoa extends AbstractAcademico{
     @Override
     public String toString() {
         return "Pessoa{" +
+                "  id='" + getId() + '\'' +
+                ", ra='" + getRa() + '\'' +
                 ", email='" + email + '\'' +
                 ", listaEndereco=" + listaEndereco +
                 ", listaTelefone=" + listaTelefone +
