@@ -10,16 +10,21 @@ public class CidadeService {
         if (cidade == null){
             throw new EntidadeNaoInformadaException(("Cidade"));
         }
+        
         if (cidade.getEstado() == null){
             throw new EntidadeNaoInformadaException(("Cidade(Estado)"));
         }
+        
         if(cidade.getNome() == null ||
                 cidade.getNome().isEmpty() ||
                 cidade.getNome().isBlank()){
             throw new CampoNaoInformadoException(("Cidade(Nome)"));
         }
-        if (cidade.getNome().length() > 60){
+        
+        if (cidade.getNome().length() > 120){
             throw new CampoLimiteTamanhoException("Cidade(Nome)", "60");
         }
+        
+        
     }
 }
