@@ -90,7 +90,7 @@ public class PessoaService {
         if (!listaTelefone.isEmpty()) {
             for (int i = 0; i < listaTelefone.size(); i++) {
                 TelefoneService telefoneService = new TelefoneService();
-                telefoneService.insert(listaTelefone.get(i), idPessoa);
+                telefoneService.insert(listaTelefone.get(i), idPessoa, 0);
             }
         }
 

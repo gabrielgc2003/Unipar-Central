@@ -1,15 +1,17 @@
 package com.mycompany.unipar.central.models;
 
+import com.mycompany.unipar.central.enums.OperadoraEnum;
+
 public class Telefone extends AbstractAcademico{
     private String numero;
-    private int operadora;
-
+    private OperadoraEnum operadoraEnum;
 
     public Telefone() {
     }
-    public Telefone( String numero, int operadora) {
+
+    public Telefone(String numero, OperadoraEnum operadoraEnum) {
         this.numero = numero;
-        this.operadora = operadora;
+        this.operadoraEnum = operadoraEnum;
     }
 
     public String getNumero() {
@@ -20,19 +22,21 @@ public class Telefone extends AbstractAcademico{
         this.numero = numero;
     }
 
-    public int getOperadora() {
-        return operadora;
+    public OperadoraEnum getOperadoraEnum() {
+        return operadoraEnum;
     }
 
-    public void setOperadora(int operadora) {
-        this.operadora = operadora;
+    public void setOperadoraEnum(OperadoraEnum operadoraEnum) {
+        this.operadoraEnum = operadoraEnum;
     }
 
     @Override
     public String toString() {
         return "Telefone{" +
+                " id=" + getId() +
+                ", ra=" + getRa() +
                 ", numero='" + numero + '\'' +
-                ", operadora='" + operadora + '\'' +
+                ", operadoraEnum=" + operadoraEnum +
                 '}';
     }
 }
