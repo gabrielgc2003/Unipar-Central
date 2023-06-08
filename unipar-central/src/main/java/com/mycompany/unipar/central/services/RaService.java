@@ -17,7 +17,15 @@ public class RaService {
     public void ValidarRa(String ra) throws CampoLimiteTamanhoException,
             CampoNaoInformadoException, EntidadeNaoInformadaException, Exception{
         
+        if(ra == null ||
+           ra.isEmpty() ||
+           ra.isBlank()){
+           throw new CampoNaoInformadoException(("Registro Acadêmico 'RA'"));
+        }
         
+        if(ra.length() != 8){
+            throw new CampoLimiteTamanhoException("Registro Acadêmico 'RA'", "8");
+        }
     }
 
     

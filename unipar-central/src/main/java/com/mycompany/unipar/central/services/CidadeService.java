@@ -6,7 +6,9 @@ import com.mycompany.unipar.central.exceptions.EntidadeNaoInformadaException;
 import com.mycompany.unipar.central.models.Cidade;
 
 public class CidadeService {
-    public void validar(Cidade cidade) throws EntidadeNaoInformadaException, CampoLimiteTamanhoException, CampoNaoInformadoException {
+    
+    public void validar(Cidade cidade) throws EntidadeNaoInformadaException, 
+            CampoLimiteTamanhoException, CampoNaoInformadoException {
         if (cidade == null){
             throw new EntidadeNaoInformadaException(("Cidade"));
         }
