@@ -119,17 +119,16 @@ public class PessoaDAO {
         }
     }
 
-    public void update(Pais pais) throws SQLException{
+    public void update(Pessoa pessoa) throws SQLException{
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(UPDATE);
-            pstmt.setString(1, pais.getNome());
-            pstmt.setString(2, pais.getSigla());
-            pstmt.setString(3, pais.getRa());
-            pstmt.setInt(4, pais.getId());
+            pstmt.setString(1, pessoa.getEmail());
+            pstmt.setString(2, pessoa.getRa());
+            pstmt.setInt(3, pessoa.getId());
             pstmt.executeUpdate();
 
 
