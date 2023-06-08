@@ -73,7 +73,7 @@ public class PessoaFisicaService {
         PessoaFisica retorno = pessoaFisicaDAO.findById(id);
 
         if (retorno == null)
-            throw new Exception("Não foi possível encontrar uma pessoa" +
+            throw new Exception("Não foi possível encontrar uma pessoa física" +
                     "com id " + id + " tente outro código.");
         return retorno;
     }
