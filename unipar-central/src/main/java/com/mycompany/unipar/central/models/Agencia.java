@@ -4,18 +4,24 @@ import java.util.ArrayList;
 
 public class Agencia extends AbstractAcademico{
     private String codigo;
+    private String digito;
     private String razaoSocial;
     private String cnpj;
+
+    private Banco banco;
+
     private ArrayList<Telefone> listaTelefone;
 
 
     public Agencia() {
     }
 
-    public Agencia( String codigo, String razaoSocial, String cnpj, ArrayList<Telefone> listaTelefone) {
+    public Agencia( String codigo, String digito, String razaoSocial, String cnpj, Banco banco,ArrayList<Telefone> listaTelefone) {
         this.codigo = codigo;
+        this.digito = digito;
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
+        this.banco = banco;
         this.listaTelefone = listaTelefone;
     }
 
@@ -25,6 +31,14 @@ public class Agencia extends AbstractAcademico{
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public String getDigito(){
+        return digito;
+    }
+
+    public void setDigito(String digito){
+        this.digito = digito;
     }
 
     public String getRazaoSocial() {
@@ -43,6 +57,13 @@ public class Agencia extends AbstractAcademico{
         this.cnpj = cnpj;
     }
 
+    public Banco setBanco (Banco banco){
+        this.banco = banco;
+    }
+
+    public void getBanco(){
+        return banco;
+    }
 
     public ArrayList<Telefone> getListaTelefone() {
         return listaTelefone;
