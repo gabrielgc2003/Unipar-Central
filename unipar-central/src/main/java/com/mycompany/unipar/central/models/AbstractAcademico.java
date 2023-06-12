@@ -19,4 +19,7 @@ public abstract class AbstractAcademico {
     public void setRa(String ra) {
         this.ra = ra;
     }
+
+
+
 }
