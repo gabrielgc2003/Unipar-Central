@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  *
- * @author rodrigo
+ * @author gabri
  */
 public class UniparCentral {
 
