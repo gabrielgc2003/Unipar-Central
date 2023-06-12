@@ -2,6 +2,7 @@ package com.mycompany.unipar.central.models;
 
 import java.util.ArrayList;
 
+
 public class Banco extends AbstractAcademico {
 
     private String nome;

@@ -23,7 +23,7 @@ import java.util.List;
 public class UniparCentral {
 
     public static void main(String[] args) {
-        //Find_All
+      /*  //Find_All
         try {
             PaisService paisService = new PaisService();
             List<Pais> listaPais = paisService.findAll();
@@ -75,6 +75,6 @@ public class UniparCentral {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
-
+*/
     }
 }
