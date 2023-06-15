@@ -7,16 +7,26 @@ public class Pessoa extends AbstractAcademico{
     private String email;
     private ArrayList<Endereco> listaEndereco;
     private ArrayList<Telefone> listaTelefone;
+    private int id;
 
     public Pessoa() {
     }
 
-    public Pessoa( String email, ArrayList<Endereco> listaEndereco, ArrayList<Telefone> listaTelefone) {
+    public Pessoa( String email, ArrayList<Endereco> listaEndereco, ArrayList<Telefone> listaTelefone,int id) {
         this.email = email;
         this.listaEndereco = listaEndereco;
         this.listaTelefone = listaTelefone;
+        this.id=id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getEmail() {
         return email;
     }

@@ -7,18 +7,28 @@ public class Agencia extends AbstractAcademico{
     private String razaoSocial;
     private String cnpj;
     private ArrayList<Telefone> listaTelefone;
+    private int id;
 
 
     public Agencia() {
     }
 
-    public Agencia( String codigo, String razaoSocial, String cnpj, ArrayList<Telefone> listaTelefone) {
+    public Agencia( String codigo, String razaoSocial, String cnpj, ArrayList<Telefone> listaTelefone,int id) {
         this.codigo = codigo;
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
         this.listaTelefone = listaTelefone;
+        this.id=id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getCodigo() {
         return codigo;
     }
