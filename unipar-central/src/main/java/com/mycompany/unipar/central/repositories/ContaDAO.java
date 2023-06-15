@@ -77,8 +77,8 @@ public class ContaDAO {
                 retorno.setDigito(rs.getString("DIGITO"));
                 retorno.setSaldo(rs.getDouble("SALDO"));
                 retorno.setTipoConta(TipoContaEnum.valueOf(rs.getString("TIPO")));
-                retorno.setAgencia(new AgenciaDAO().findById(rs.getString("AGENCIA_ID")));
-                retorno.setPessoa(new PessoaDAO().findById(rs.getString("PESSOA_ID")));
+                retorno.setAgencia(new AgenciaDAO().FIND_BY_ID(rs.getString("AGENCIA_ID")));
+                retorno.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
                 retorno.setRa(rs.getString("RA"));
             }
         } finally {
