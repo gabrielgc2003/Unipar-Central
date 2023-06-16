@@ -1,5 +1,6 @@
 package com.mycompany.unipar.central.repositories;
 
+
 import com.mycompany.unipar.central.enums.TipoContaEnum;
 import com.mycompany.unipar.central.models.Conta;
 import com.mycompany.unipar.central.utils.db.DatabaseUtils;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContaDAO {
-    private static final String INSERT = "INSERT INTO CONTA(NUMERO, DIGITO, SALDO, TIPO, AGENCIA, PESSOA, RA) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO CONTA(NUMERO, DIGITO, SALDO, RA, TIPO, AGENCIA, PESSOA) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL = "SELECT ID, NUMERO, DIGITO, SALDO, TIPO, AGENCIA, PESSOA, RA FROM CONTA";
     private static final String FIND_BY_ID = "SELECT ID, NUMERO, DIGITO, SALDO, TIPO, AGENCIA, PESSOA, RA FROM CONTA WHERE ID = ?";
     private static final String DELETE_BY_ID = "DELETE FROM CONTA WHERE ID = ?";
@@ -23,7 +24,9 @@ public class ContaDAO {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-
+        
+        
+     
         try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(FIND_ALL);
@@ -35,9 +38,23 @@ public class ContaDAO {
                 conta.setNumero(rs.getString("NUMERO"));
                 conta.setDigito(rs.getString("DIGITO"));
                 conta.setSaldo(rs.getDouble("SALDO"));
-                conta.setTipoConta(TipoContaEnum.valueOf(rs.getString("TIPO")));
+
+                int tipoContaId = rs.getInt("TIPO");
+                TipoContaEnum tipoConta;
+                if (tipoContaId == 1) {
+                    tipoConta = TipoContaEnum.POUPANCA;
+                } else if (tipoContaId == 2) {
+                    tipoConta = TipoContaEnum.CORRENTE;
+                } else if (tipoContaId == 3) {
+                    tipoConta = TipoContaEnum.CONTASALARIO;
+                } else {
+                    tipoConta = TipoContaEnum.TIPO_DESCONHECIDO;
+                }
+                conta.setTipoConta(tipoConta);
+
                 conta.setAgencia(new AgenciaDAO().FIND_BY_ID(rs.getInt("AGENCIA_ID")));
                 conta.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
+
                 conta.setRa(rs.getString("RA"));
 
                 retorno.add(conta);
@@ -77,9 +94,23 @@ public class ContaDAO {
                 retorno.setNumero(rs.getString("NUMERO"));
                 retorno.setDigito(rs.getString("DIGITO"));
                 retorno.setSaldo(rs.getDouble("SALDO"));
-                retorno.setTipoConta(TipoContaEnum.valueOf(rs.getString("TIPO")));
+
+                int tipoContaId = rs.getInt("TIPO");
+                TipoContaEnum tipoConta;
+                if (tipoContaId == 1) {
+                    tipoConta = TipoContaEnum.POUPANCA;
+                } else if (tipoContaId == 2) {
+                    tipoConta = TipoContaEnum.CORRENTE;
+                } else if (tipoContaId == 3) {
+                    tipoConta = TipoContaEnum.CONTASALARIO;
+                } else {
+                   tipoConta = TipoContaEnum.TIPO_DESCONHECIDO;
+                }
+                retorno.setTipoConta(tipoConta);
+
                 retorno.setAgencia(new AgenciaDAO().FIND_BY_ID(rs.getInt("AGENCIA_ID")));
                 retorno.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
+
                 retorno.setRa(rs.getString("RA"));
             }
         } finally {
@@ -98,6 +129,9 @@ public class ContaDAO {
 
         return retorno;
     }
+     
+
+   
 
     public void insert(Conta conta) throws SQLException {
         Connection conn = null;
@@ -109,10 +143,17 @@ public class ContaDAO {
             pstmt.setString(1, conta.getNumero());
             pstmt.setString(2, conta.getDigito());
             pstmt.setDouble(3, conta.getSaldo());
+
             pstmt.setString(4, conta.getTipoConta().toString());
             pstmt.setInt(5, conta.getAgencia().getId());
             pstmt.setInt(6, conta.getPessoa().getId());
             pstmt.setString(7, conta.getRa());
+
+
+            pstmt.setInt(4, conta.getTipoConta().getId());
+            pstmt.setString(5, conta.getRa());
+            pstmt.setInt(6, conta.getAgencia().getId());
+            pstmt.setInt(7, conta.getPessoa().getId());
 
             pstmt.executeUpdate();
         } finally {
@@ -132,15 +173,22 @@ public class ContaDAO {
 
         try {
             conn = new DatabaseUtils().getConnection();
-            pstmt = conn.prepareStatement(UPDATE);
+            pstmt = conn.prepareStatement(INSERT);
             pstmt.setString(1, conta.getNumero());
             pstmt.setString(2, conta.getDigito());
             pstmt.setDouble(3, conta.getSaldo());
+
             pstmt.setString(4, conta.getTipoConta().toString());
             pstmt.setInt(5, conta.getAgencia().getId());
             pstmt.setInt(6, conta.getPessoa().getId());
             pstmt.setString(7, conta.getRa());
             pstmt.setInt(8, conta.getId());
+
+
+            pstmt.setInt(4, conta.getTipoConta().getId());
+            pstmt.setString(5, conta.getRa());
+            pstmt.setInt(6, conta.getAgencia().getId());
+            pstmt.setInt(7, conta.getPessoa().getId());
 
             pstmt.executeUpdate();
         } finally {

@@ -1,18 +1,15 @@
 package com.mycompany.unipar.central.repositories;
 
-import com.mycompany.unipar.central.exceptions.CampoLimiteTamanhoException;
-import com.mycompany.unipar.central.exceptions.CampoNaoInformadoException;
-import com.mycompany.unipar.central.exceptions.EntidadeNaoInformadaException;
 import com.mycompany.unipar.central.models.Agencia;
 import com.mycompany.unipar.central.models.Banco;
-import com.mycompany.unipar.central.services.AgenciaService;
 import com.mycompany.unipar.central.utils.db.DatabaseUtils;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgenciaDAO {
     private static final String INSERT = "INSERT INTO (CODIGO, DIGITO, RAZAOSOCIAL, CNPJ, RA, BANCO_ID) VALUES (?, ?, ?, ?, ?, ?)";
@@ -23,13 +20,11 @@ public class AgenciaDAO {
             "INNER JOIN BANCO b ON (b.id = agencia.banco_id)" +
             "WHERE AGENCIA.ID = ?";
 
-
-
     private static final String DELETE_BY_ID = "DELETE AGENCIA WHERE ID = ?";
 
     private static final String UPDATE = "UPDATE AGENCIA SET CODIGO = ?, DIGITO = ?, RAZAOSOCIAL = ?, CNPJ = ?, RA = ?, BANCO_ID = ? WHERE ID = ?";
 
-    private void insert (Agencia agencia) throws SQLException{
+    public void insert(Agencia agencia) throws SQLException{
 
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -55,8 +50,9 @@ public class AgenciaDAO {
         }
     }
 
-    public Agencia FIND_ALL(int id) throws SQLException{
+    public List<Agencia> FIND_ALL() throws SQLException{
 
+        List<Agencia> agencias = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -65,10 +61,8 @@ public class AgenciaDAO {
 
         try{
             while(rs.next()){
-
                 conn = new DatabaseUtils().getConnection();
                 pstm = conn.prepareStatement(FIND_ALL);
-                pstm.setInt(1, id);
                 rs = pstm.executeQuery();
 
                 agencia = new Agencia();
@@ -79,6 +73,7 @@ public class AgenciaDAO {
                 agencia.setCnpj(rs.getString("CNPJ"));
                 agencia.setRa(rs.getString("RA"));
                 agencia.setBanco(new BancoDAO().findById(rs.getInt("ID")));
+                agencias.add(agencia);
             }
         } finally {
             if (conn != null){
@@ -91,8 +86,7 @@ public class AgenciaDAO {
                 rs.close();
             }
         }
-
-        return agencia;
+        return agencias;
     }
 
     public Agencia FIND_BY_ID(int id) throws SQLException{
@@ -146,7 +140,7 @@ public class AgenciaDAO {
 
         try{
             conn = new DatabaseUtils().getConnection();
-            pstm = conn.prepareStatement(FIND_BY_ID);
+            pstm = conn.prepareStatement(DELETE_BY_ID);
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
         } finally {
@@ -159,6 +153,32 @@ public class AgenciaDAO {
             }
         }
 
+    }
+
+    public void update(Agencia agencia) throws SQLException{
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try {
+            conn =  new DatabaseUtils().getConnection();
+            pstm = conn.prepareStatement(UPDATE);
+            pstm.setString(1, agencia.getCodigo());
+            pstm.setString(2, agencia.getDigito());
+            pstm.setString(3, agencia.getRazaoSocial());
+            pstm.setString(4, agencia.getCnpj());
+            pstm.setString(5, agencia.getRa());
+            pstm.setInt(6, agencia.getBanco());
+            pstm.executeUpdate();
+
+        } finally {
+            if (pstm != null) {
+                pstm.close();
+            }
+
+            if (conn != null) {
+                conn.close();
+            }
+        }
     }
 
 }

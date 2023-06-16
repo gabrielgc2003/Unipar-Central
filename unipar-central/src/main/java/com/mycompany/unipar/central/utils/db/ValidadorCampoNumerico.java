@@ -13,10 +13,4 @@ public class ValidadorCampoNumerico {
         return true;
     }
 
-    public static void validarCampoNumerico (String campo, String valor) throws CampoNumericoInvalidoException {
-        if (!isCampoNumericoValido(valor)){
-            throw new CampoNumericoInvalidoException(campo);
-        }
-    }
-
 }
