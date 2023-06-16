@@ -65,7 +65,7 @@ public class EnderecoDAO {
                 endereco.setCep(rs.getString("CEP"));
                 endereco.setComplemento(rs.getString("COMPLEMENTO"));
                 endereco.setRa(rs.getString("RA"));
-                endereco.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
+                //endereco.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
                 endereco.setCidade(new CidadeDAO().findById(rs.getInt("CIDADE_ID")));
                 retorno.add(endereco);
             }
@@ -108,7 +108,7 @@ public class EnderecoDAO {
                 endereco.setCep(rs.getString("CEP"));
                 endereco.setComplemento(rs.getString("COMPLEMENTO"));
                 endereco.setRa(rs.getString("RA"));
-                endereco.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
+                //endereco.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
                 endereco.setCidade(new CidadeDAO().findById(rs.getInt("CIDADE_ID")));
                 
             }
@@ -129,7 +129,7 @@ public class EnderecoDAO {
     }
     
     
-    public void insert(Endereco endereco) throws SQLException{
+    public void insert(Endereco endereco, int idPessoa) throws SQLException{
         Connection conn = null;
         PreparedStatement pstmt = null;
 

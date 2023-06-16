@@ -54,10 +54,10 @@ public class EnderecoService {
         return retorno;
    }
 
-   public void insert(Endereco endereco) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
+   public void insert(Endereco endereco, int idPessoa) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
         validar(endereco);
         EnderecoDAO enderecoDAO = new EnderecoDAO();
-        enderecoDAO.insert(endereco);
+        enderecoDAO.insert(endereco, idPessoa);
    }
    public void update(Endereco endereco) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
         validar(endereco);
