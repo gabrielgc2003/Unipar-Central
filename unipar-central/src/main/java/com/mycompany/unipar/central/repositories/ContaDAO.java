@@ -35,8 +35,6 @@ public class ContaDAO {
                 conta.setDigito(rs.getString("DIGITO"));
                 conta.setSaldo(rs.getDouble("SALDO"));
                 conta.setTipoConta(TipoContaEnum.valueOf(rs.getString("TIPO")));
-                conta.setAgencia(new AgenciaDAO().findById(rs.getString("AGENCIA_ID")));
-                conta.setPessoa(new PessoaDAO().findById(rs.getString("PESSOA_ID")));
                 conta.setRa(rs.getString("RA"));
                 
                 retorno.add(conta);

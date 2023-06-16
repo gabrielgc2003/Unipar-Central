@@ -1,53 +1,63 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.mycompany.unipar.central.repositories;
 
-import com.mycompany.unipar.central.models.Estado;
-import com.mycompany.unipar.central.models.Pais;
+import java.sql.SQLException;
+import com.mycompany.unipar.central.models.Cidade;
 import com.mycompany.unipar.central.utils.db.DatabaseUtils;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-public class EstadoDAO {
-    private static final String INSERT = "INSERT INTO ESTADO(ID, NOME, SIGLA, RA, PAIS_ID)" +
-            "VALUES (?, ?, ?, ?, ?)";
-
-    private static final String FIND_ALL = "SELECT ID, NOME, SIGLA, RA, PAIS_ID  FROM ESTADO";
-    private static final String FIND_BY_ID = "SELECT ID, NOME, SIGLA, RA, PAIS_ID  FROM ESTADO WHERE ID = ?";
-    private static final String DELETE_BY_ID = "DELETE FROM PAIS ESTADO ID = ?";
-    private static final String UPDATE = "UPDATE ESTADO SET NOME = ?, SIGLA = ?, RA = ?, PAIS_ID = ? WHERE ID = ?";
-
-    public List<Estado> findAll() throws SQLException {
-        ArrayList<Estado> retorno = new ArrayList<>();
+/**
+ *
+ * @author gabri
+ */
+public class CidadeDAO {
+    private static final String INSERT = "INSERT INTO CIDADE (ID, NOME, RA)"
+                                        +"VALUES (?, ?, ?)";
+    
+    private static final String FIND_ALL = "SELECT ID, NOME, RA FROM CIDADE";
+    
+    private static final String FIND_BY_ID = "SELECT ID, NOME, RA FROM CIDADE "
+            + "WHERE ID = ? AND NOME = ?, RA = ?";
+    
+    private static final String DELETE_BY_ID = "DELETE FROM CIDADE WHERE "
+            + "ID = ? AND NOME = ?, RA = ?";
+    
+    private static final String UPDATE = "UPDATE CIDADE SET ID = ?, NOME = ?, RA = ?"
+            + "WHERE ID = ? AND NOME = ?, RA = ? ESTADO_ID = ? WHERE ID = ?";
+    
+    public List<Cidade> findAll() throws SQLException{
+        ArrayList<Cidade> retorno = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-
-        try{
+        
+        try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(FIND_ALL);
             rs = pstmt.executeQuery();
+            
             while(rs.next()){
-                Estado estado = new Estado();
-                estado.setId(rs.getInt("ID"));
-                estado.setNome(rs.getString("NOME"));
-                estado.setSigla(rs.getString("SIGLA"));
-                estado.setRa(rs.getString("RA"));
-                estado.setPais(new PaisDAO().findById(rs.getInt("PAIS_ID")));
-                retorno.add(estado);
+                Cidade cidade = new Cidade();
+                cidade.setId(rs.getInt("ID"));
+                cidade.setNome(rs.getString("NOME"));
+                cidade.setRa(rs.getString("RA"));
+                retorno.add(cidade);
             }
-        }finally {
+        } finally {
             if(rs != null){
                 rs.close();
             }
-
+            
             if(pstmt != null){
                 pstmt.close();
             }
-
+            
             if(conn != null){
                 conn.close();
             }
@@ -55,28 +65,27 @@ public class EstadoDAO {
         return retorno;
     }
     
-      public Estado findById(int id) throws SQLException {
+    public Cidade findById(int id) throws SQLException{
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        Estado estado = null;
-
+        Cidade retorno = null;
+        
         try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(FIND_BY_ID);
-            pstmt.setInt(1,id);
+            pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
-
+            
             while(rs.next()){
-                estado = new Estado();
-                estado.setId(rs.getInt("ID"));
-                estado.setRa(rs.getString("RA"));
-                estado.setNome(rs.getString("NOME"));
-                estado.setSigla(rs.getString("SIGLA"));
-                estado.setPais(new PaisDAO().findById(rs.getInt("PAIS_ID")));
+                retorno = new Cidade();
+                retorno.setId(rs.getInt("ID"));
+                retorno.setRa(rs.getString("RA"));
+                retorno.setNome(rs.getString("NOME"));
+                retorno.setEstado(new EstadoDAO().findById(
+                        rs.getInt("ESTADO_ID")));
+                
             }
-
-
         } finally {
             if (rs != null) {
                 rs.close();
@@ -90,21 +99,20 @@ public class EstadoDAO {
                 conn.close();
             }
         }
-        return estado;
+        return retorno;
     }
-      
     
-    public void insert(Estado estado) throws SQLException{
+    
+    public void insert(Cidade cidade) throws SQLException{
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(INSERT);
-            pstmt.setInt(1, estado.getId());
-            pstmt.setString(2, estado.getNome());
-            pstmt.setString(3, estado.getSigla());
-            pstmt.setString(4, estado.getRa());
+            pstmt.setInt(1, cidade.getId());
+            pstmt.setString(2, cidade.getNome());
+            pstmt.setString(4, cidade.getRa());
             pstmt.executeUpdate();
 
 
@@ -119,17 +127,16 @@ public class EstadoDAO {
         }
     }
 
-    public void update(Estado estado) throws SQLException{
+    public void update(Cidade cidade) throws SQLException{
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(UPDATE);
-            pstmt.setString(1, estado.getNome());
-            pstmt.setString(2, estado.getSigla());
-            pstmt.setString(3, estado.getRa());
-            pstmt.setInt(4, estado.getId());
+            pstmt.setString(1, cidade.getNome());
+            pstmt.setString(3, cidade.getRa());
+            pstmt.setInt(4, cidade.getId());
             pstmt.executeUpdate();
 
 
@@ -143,7 +150,7 @@ public class EstadoDAO {
             }
         }
     }
-    
+
     public void delete(int id) throws SQLException{
         Connection conn = null;
         PreparedStatement pstmt = null;
