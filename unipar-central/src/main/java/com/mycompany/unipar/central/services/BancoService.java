@@ -1,20 +1,22 @@
 package com.mycompany.unipar.central.services;
 
-import com.mycompany.unipar.central.exceptions.CampoLimiteTamanhoException;
-import com.mycompany.unipar.central.exceptions.CampoNaoInformadoException;
-import com.mycompany.unipar.central.exceptions.EntidadeNaoInformadaException;
-import com.mycompany.unipar.central.exceptions.NaoExisteDatabaseException;
+import com.mycompany.unipar.central.exceptions.*;
 import com.mycompany.unipar.central.models.Banco;
-import com.mycompany.unipar.central.models.Conta;
 import com.mycompany.unipar.central.repositories.BancoDAO;
-import com.mycompany.unipar.central.repositories.ContaDAO;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class BancoService {
 
-    public void validar (Banco banco) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException {
+    private RAService raService;
 
+    public void TransacaoService(){
+        this.raService = new RAService();
+    }
+
+    public void validar (Banco banco) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, ValorInformadoRAException {
+        raService.validarRA(banco.getRa());
         if (banco == null){
             throw new EntidadeNaoInformadaException("Banco");
         }
@@ -28,13 +30,13 @@ public class BancoService {
         }
     }
 
-    public void insert(Banco banco) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
+    public void insert(Banco banco) throws Exception{
         validar(banco);
         BancoDAO bancoDAO = new BancoDAO();
         bancoDAO.insert(banco);
     }
 
-    public void update(Banco banco) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, NaoExisteDatabaseException, Exception{
+    public void update(Banco banco) throws Exception{
         validar(banco);
         BancoDAO bancoDAO = new BancoDAO();
         Banco bancoExistente = bancoDAO.findById(banco.getId());
@@ -44,13 +46,34 @@ public class BancoService {
         bancoDAO.update(banco);
     }
 
-    public void delete(int id) throws SQLException, Exception{
+    public void delete(int id) throws Exception{
         BancoDAO bancoDAO = new BancoDAO();
         Banco bancoExistente = bancoDAO.findById(id);
         if (bancoExistente == null) {
             throw new NaoExisteDatabaseException("ID", "Banco");
         }
         bancoDAO.deleteById(id);
+    }
+
+    public List<Banco> findAll() throws SQLException, FindRetornadoException {
+        BancoDAO bancoDAO = new BancoDAO();
+        List<Banco> listaBanco = bancoDAO.findAll();
+        if (listaBanco.isEmpty()){
+            throw new FindRetornadoException("Banco");
+        }
+        return listaBanco;
+    }
+
+    public Banco findById(int id) throws Exception{
+        if(id <= 0)
+            throw  new CampoLimiteTamanhoException("id","1");
+        BancoDAO bancoDAO = new BancoDAO();
+        Banco retorno = bancoDAO.findById(id);
+
+        if (retorno == null){
+            throw new FindRetornadoException("Banco");
+        }
+        return retorno;
     }
 
 }

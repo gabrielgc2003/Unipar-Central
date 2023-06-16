@@ -11,12 +11,13 @@ public class Agencia extends AbstractAcademico{
     private Banco banco;
 
     private ArrayList<Telefone> listaTelefone;
-
+    int id;
 
     public Agencia() {
     }
 
-    public Agencia( String codigo, String digito, String razaoSocial, String cnpj, Banco banco,ArrayList<Telefone> listaTelefone) {
+    public Agencia( int id, String codigo, String digito, String razaoSocial, String cnpj, Banco banco,ArrayList<Telefone> listaTelefone) {
+        this.id = id;
         this.codigo = codigo;
         this.digito = digito;
         this.razaoSocial = razaoSocial;
@@ -24,6 +25,17 @@ public class Agencia extends AbstractAcademico{
         this.banco = banco;
         this.listaTelefone = listaTelefone;
     }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public String getCodigo() {
         return codigo;
