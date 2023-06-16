@@ -96,7 +96,7 @@ public class ContaDAO {
         return retorno;
     }
 
-    public void insert(Conta conta, int idAgencia, int idPessoa) throws SQLException {
+    public void insert(Conta conta) throws SQLException {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -108,8 +108,8 @@ public class ContaDAO {
             pstmt.setDouble(3, conta.getSaldo());
             pstmt.setInt(4, conta.getTipoConta().getId());
             pstmt.setString(5, conta.getRa());
-            pstmt.setInt(6, idAgencia);
-            pstmt.setInt(7, idPessoa);
+            pstmt.setInt(6, conta.getAgencia().getId());
+            pstmt.setInt(7, conta.getPessoa().getId());
             pstmt.executeUpdate();
         } finally {
             if (pstmt != null) {
@@ -122,7 +122,7 @@ public class ContaDAO {
         }
     }
 
-    public void update(Conta conta, int idAgencia, int idPessoa) throws SQLException {
+    public void update(Conta conta) throws SQLException {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -134,8 +134,8 @@ public class ContaDAO {
             pstmt.setDouble(3, conta.getSaldo());
             pstmt.setInt(4, conta.getTipoConta().getId());
             pstmt.setString(5, conta.getRa());
-            pstmt.setInt(6, idAgencia);
-            pstmt.setInt(7, idPessoa);
+            pstmt.setInt(6, conta.getAgencia().getId());
+            pstmt.setInt(7, conta.getPessoa().getId());
             
             pstmt.executeUpdate();
         } finally {

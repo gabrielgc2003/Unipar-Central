@@ -30,7 +30,6 @@ public class TelefoneService {
         if (telefone.getNumero().length() > 9){
             throw new CampoLimiteTamanhoException("Telefone(Numero)", "9");
         }
-        if ()
     }
 
 
