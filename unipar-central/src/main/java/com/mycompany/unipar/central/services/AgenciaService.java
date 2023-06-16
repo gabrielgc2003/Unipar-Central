@@ -3,8 +3,8 @@ package com.mycompany.unipar.central.services;
 import com.mycompany.unipar.central.exceptions.*;
 import com.mycompany.unipar.central.models.Agencia;
 import com.mycompany.unipar.central.repositories.AgenciaDAO;
+import com.mycompany.unipar.central.repositories.BancoDAO;
 import com.mycompany.unipar.central.utils.db.ValidadorCampoNumerico;
-import com.mycompany.unipar.central.utils.db.ValidatorExisteDatabase;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,7 +13,7 @@ public class AgenciaService {
 
     private RAService raService;
 
-    public void TransacaoService(){
+    public void RAService(){
         this.raService = new RAService();
     }
 
@@ -80,26 +80,22 @@ public class AgenciaService {
             throw new CampoLimiteTamanhoException("agencia(RA)", "8");
         }
 
-        if (!ValidatorExisteDatabase.existeBanco(agencia.getId())){
-            throw new NaoExisteDatabaseException("agencia(Banco_id)", "Banco");
-        }
-
     }
 
-    public void insert(Agencia agencia) throws Exception{
+    public void insert(Agencia agencia, int idBanco) throws Exception{
         validar(agencia);
         AgenciaDAO agenciaDAO = new AgenciaDAO();
-        agenciaDAO.insert(agencia);
+        agenciaDAO.insert(agencia, idBanco);
     }
 
-    public void update(Agencia agencia) throws Exception{
+    public void update(Agencia agencia, int idBanco) throws Exception{
         validar(agencia);
         AgenciaDAO agenciaDAO = new AgenciaDAO();
         Agencia agenciaExistente = agenciaDAO.FIND_BY_ID(agencia.getId());
         if (agenciaExistente == null) {
             throw new NaoExisteDatabaseException("ID", "Banco");
         }
-        agenciaDAO.update(agencia);
+        agenciaDAO.update(agencia, idBanco);
     }
 
     public void delete(int id) throws Exception{
@@ -130,6 +126,14 @@ public class AgenciaService {
             throw new FindRetornadoException("Agencia");
         }
         return retorno;
+    }
+
+    public int findExiste (int id) throws Exception {
+        if(id <= 0)
+            throw  new CampoLimiteTamanhoException("id","1");
+        AgenciaDAO agenciaDAO = new AgenciaDAO();
+        int count = agenciaDAO.findExiste(id);
+        return count;
     }
 
 }

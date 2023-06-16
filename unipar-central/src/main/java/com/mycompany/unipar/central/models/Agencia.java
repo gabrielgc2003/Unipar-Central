@@ -8,7 +8,7 @@ public class Agencia extends AbstractAcademico{
     private String razaoSocial;
     private String cnpj;
 
-    private Banco banco;
+    private int banco;
 
     private ArrayList<Telefone> listaTelefone;
     int id;
@@ -16,7 +16,7 @@ public class Agencia extends AbstractAcademico{
     public Agencia() {
     }
 
-    public Agencia( int id, String codigo, String digito, String razaoSocial, String cnpj, Banco banco,ArrayList<Telefone> listaTelefone) {
+    public Agencia( int id, String codigo, String digito, String razaoSocial, String cnpj, int banco,ArrayList<Telefone> listaTelefone) {
         this.id = id;
         this.codigo = codigo;
         this.digito = digito;
@@ -69,12 +69,12 @@ public class Agencia extends AbstractAcademico{
         this.cnpj = cnpj;
     }
 
-    public void setBanco (Banco banco){
+    public void setBanco (int banco){
         this.banco = banco;
     }
 
     public int getBanco(){
-        return banco.getId();
+        return banco;
     }
 
     public ArrayList<Telefone> getListaTelefone() {
