@@ -2,26 +2,30 @@ package com.mycompany.unipar.central.services;
 
 import com.mycompany.unipar.central.exceptions.*;
 import com.mycompany.unipar.central.models.Agencia;
-import com.mycompany.unipar.central.models.Banco;
 import com.mycompany.unipar.central.repositories.AgenciaDAO;
-import com.mycompany.unipar.central.repositories.BancoDAO;
 import com.mycompany.unipar.central.utils.db.ValidadorCampoNumerico;
 import com.mycompany.unipar.central.utils.db.ValidatorExisteDatabase;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class AgenciaService {
 
-    public void validar (Agencia agencia) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, IdIgualZeroException, IdMenorZeroException, CampoNumericoInvalidoException, SQLException, NaoExisteDatabaseException {
+    private RAService raService;
+
+    public void TransacaoService(){
+        this.raService = new RAService();
+    }
+
+    public void validar (Agencia agencia) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, CampoNumericoInvalidoException, SQLException, NaoExisteDatabaseException, ValorInformadoException, ValorInformadoRAException {
+
+        raService.validarRA(agencia.getRa());
 
         if (agencia == null){
             throw new EntidadeNaoInformadaException("agencia");
         }
-        if (agencia.getId() == 0){
-            throw new IdIgualZeroException("agencia(Id)");
-        }
-        if(agencia.getId() < 0){
-            throw new IdMenorZeroException("Agencia(Id)");
+        if (agencia.getId() <= 0){
+            throw new ValorInformadoException(agencia.getId(), "Agencia");
         }
         if(!ValidadorCampoNumerico.isCampoNumericoValido(agencia.getCodigo())){
             throw new CampoNumericoInvalidoException("agencia(codigo)");
@@ -67,9 +71,6 @@ public class AgenciaService {
         if (agencia.getCnpj().length() > 20){
             throw new CampoLimiteTamanhoException("agencia(CPNJ)", "20");
         }
-        if(!ValidadorCampoNumerico.isCampoNumericoValido(agencia.getRa())){
-            throw new CampoNumericoInvalidoException("agencia(RA)");
-        }
         if(agencia.getCnpj() == null ||
                 agencia.getCnpj().isEmpty() ||
                 agencia.getCnpj().isBlank()){
@@ -85,23 +86,23 @@ public class AgenciaService {
 
     }
 
-    public void insert(Agencia agencia) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
+    public void insert(Agencia agencia) throws Exception{
         validar(agencia);
         AgenciaDAO agenciaDAO = new AgenciaDAO();
         agenciaDAO.insert(agencia);
     }
 
-    public void update(Agencia agencia) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, NaoExisteDatabaseException, Exception{
+    public void update(Agencia agencia) throws Exception{
         validar(agencia);
         AgenciaDAO agenciaDAO = new AgenciaDAO();
         Agencia agenciaExistente = agenciaDAO.FIND_BY_ID(agencia.getId());
         if (agenciaExistente == null) {
             throw new NaoExisteDatabaseException("ID", "Banco");
         }
-        agenciaDAO.;
+        agenciaDAO.update(agencia);
     }
 
-    public void delete(int id) throws SQLException, Exception{
+    public void delete(int id) throws Exception{
         AgenciaDAO agenciaDAO = new AgenciaDAO();
         Agencia agenciaExistente = agenciaDAO.FIND_BY_ID(id);
         if (agenciaExistente == null) {
@@ -110,5 +111,25 @@ public class AgenciaService {
         agenciaDAO.delete(id);
     }
 
+    public List<Agencia> findAll() throws SQLException, FindRetornadoException {
+        AgenciaDAO agenciaDAO = new AgenciaDAO();
+        List<Agencia> listaAgencia = agenciaDAO.FIND_ALL();
+        if (listaAgencia.isEmpty()){
+            throw new FindRetornadoException("Agencia");
+        }
+        return listaAgencia;
+    }
+
+    public Agencia findById(int id) throws Exception{
+        if(id <= 0)
+            throw  new CampoLimiteTamanhoException("id","1");
+        AgenciaDAO agenciaDAO = new AgenciaDAO();
+        Agencia retorno = agenciaDAO.FIND_BY_ID(id);
+
+        if (retorno == null){
+            throw new FindRetornadoException("Agencia");
+        }
+        return retorno;
+    }
 
 }

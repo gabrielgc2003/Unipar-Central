@@ -112,7 +112,7 @@ public class CidadeDAO {
             pstmt = conn.prepareStatement(INSERT);
             pstmt.setInt(1, cidade.getId());
             pstmt.setString(2, cidade.getNome());
-            pstmt.setString(4, cidade.getRa());
+            pstmt.setString(3, cidade.getRa());
             pstmt.executeUpdate();
 
 

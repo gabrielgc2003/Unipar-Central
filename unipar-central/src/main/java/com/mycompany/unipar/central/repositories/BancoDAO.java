@@ -1,6 +1,5 @@
 package com.mycompany.unipar.central.repositories;
 
-import com.mycompany.unipar.central.models.Agencia;
 import com.mycompany.unipar.central.models.Banco;
 import com.mycompany.unipar.central.utils.db.DatabaseUtils;
 
@@ -65,7 +64,6 @@ public class BancoDAO {
                 conn.close();
             }
         }
-
         return bancos;
     }
 
@@ -128,7 +126,7 @@ public class BancoDAO {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(UPDATE);
             pstmt.setString(1, banco.getNome());
-            pstmt.setLong(2, banco.getId());
+            pstmt.setInt(2, banco.getId());
             pstmt.executeUpdate();
         } finally {
             if (pstmt != null) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContaDAO {
-    private static final String INSERT = "INSERT INTO CONTA(NUMERO, DIGITO, SALDO, TIPO, AGENCIA, PESSOA, RA) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO CONTA(NUMERO, DIGITO, SALDO, RA, TIPO, AGENCIA, PESSOA) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL = "SELECT ID, NUMERO, DIGITO, SALDO, TIPO, AGENCIA, PESSOA, RA FROM CONTA";
     private static final String FIND_BY_ID = "SELECT ID, NUMERO, DIGITO, SALDO, TIPO, AGENCIA, PESSOA, RA FROM CONTA WHERE ID = ?";
     private static final String DELETE_BY_ID = "DELETE FROM CONTA WHERE ID = ?";
@@ -75,8 +75,8 @@ public class ContaDAO {
                 retorno.setDigito(rs.getString("DIGITO"));
                 retorno.setSaldo(rs.getDouble("SALDO"));
                 retorno.setTipoConta(TipoContaEnum.valueOf(rs.getString("TIPO")));
-                retorno.setAgencia(new AgenciaDAO().findById(rs.getString("AGENCIA_ID")));
-                retorno.setPessoa(new PessoaDAO().findById(rs.getString("PESSOA_ID")));
+                retorno.setAgencia(new AgenciaDAO().FIND_BY_ID(rs.getInt("AGENCIA_ID")));
+                retorno.setPessoa(new PessoaDAO().findById(rs.getInt("PESSOA_ID")));
                 retorno.setRa(rs.getString("RA"));
             }
         } finally {
@@ -96,7 +96,7 @@ public class ContaDAO {
         return retorno;
     }
 
-    public void insert(Conta conta) throws SQLException {
+    public void insert(Conta conta, int idAgencia, int idPessoa) throws SQLException {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -106,13 +106,10 @@ public class ContaDAO {
             pstmt.setString(1, conta.getNumero());
             pstmt.setString(2, conta.getDigito());
             pstmt.setDouble(3, conta.getSaldo());
-            pstmt.setString(4, conta.getTipoConta().toString());
-            pstmt.setString(5, conta.getAgencia());
-            pstmt.setString(6, conta.getPessoa());
-            pstmt.setString(7, conta.getRa());
-            pstmt.setInt(8, conta.getId());
-		
-            
+            pstmt.setInt(4, conta.getTipoConta().getId());
+            pstmt.setString(5, conta.getRa());
+            pstmt.setInt(6, idAgencia);
+            pstmt.setInt(7, idPessoa);
             pstmt.executeUpdate();
         } finally {
             if (pstmt != null) {
@@ -125,21 +122,20 @@ public class ContaDAO {
         }
     }
 
-    public void update(Conta conta) throws SQLException {
+    public void update(Conta conta, int idAgencia, int idPessoa) throws SQLException {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = new DatabaseUtils().getConnection();
-            pstmt = conn.prepareStatement(UPDATE);
+            pstmt = conn.prepareStatement(INSERT);
             pstmt.setString(1, conta.getNumero());
             pstmt.setString(2, conta.getDigito());
             pstmt.setDouble(3, conta.getSaldo());
-            pstmt.setString(4, conta.getTipoConta().toString());
-            pstmt.setString(5, conta.getAgencia());
-            pstmt.setString(6, conta.getPessoa());
-            pstmt.setString(7, conta.getRa());
-            pstmt.setInt(8, conta.getId());
+            pstmt.setInt(4, conta.getTipoConta().getId());
+            pstmt.setString(5, conta.getRa());
+            pstmt.setInt(6, idAgencia);
+            pstmt.setInt(7, idPessoa);
             
             pstmt.executeUpdate();
         } finally {
