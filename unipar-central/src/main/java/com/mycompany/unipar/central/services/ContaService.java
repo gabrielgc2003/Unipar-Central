@@ -11,6 +11,12 @@ import java.util.List;
 
 public class ContaService {
 
+    private ContaDAO contaDAO;
+
+    public ContaService() {
+        this.contaDAO = new ContaDAO();
+    }
+
     public void validar(Conta conta) throws EntidadeNaoInformadaException, CampoNaoInformadoException,
             CampoLimiteTamanhoException {
         if (conta == null) {
@@ -26,7 +32,6 @@ public class ContaService {
 
     public List<Conta> listarContas() throws SQLException {
         try {
-            ContaDAO contaDAO = new ContaDAO();
             return contaDAO.findAll();
         } catch (SQLException e) {
             throw new SQLException("Erro ao listar contas: " + e.getMessage());
@@ -35,7 +40,6 @@ public class ContaService {
 
     public Conta buscarContaPorId(int id) throws SQLException {
         try {
-             ContaDAO contaDAO = new ContaDAO();
             Conta conta = contaDAO.findById(id);
             if (conta == null) {
                 throw new IllegalArgumentException("Conta não encontrada");
@@ -48,7 +52,6 @@ public class ContaService {
 
     public void criarConta(Conta conta) throws SQLException {
         try {
-             ContaDAO contaDAO = new ContaDAO();
             contaDAO.insert(conta);
         } catch (SQLException e) {
             throw new SQLException("Erro ao criar conta: " + e.getMessage());
@@ -57,7 +60,6 @@ public class ContaService {
 
     public void atualizarConta(Conta conta) throws SQLException {
         try {
-            ContaDAO contaDAO = new ContaDAO();
             Conta contaExistente = contaDAO.findById(conta.getId());
             if (contaExistente == null) {
                 throw new IllegalArgumentException("Conta não encontrada");
@@ -70,12 +72,11 @@ public class ContaService {
 
     public void excluirConta(int id) throws SQLException {
         try {
-             ContaDAO contaDAO = new ContaDAO();
             Conta contaExistente = contaDAO.findById(id);
             if (contaExistente == null) {
                 throw new IllegalArgumentException("Conta não encontrada");
             }
-            contaDAO.delete(id);
+            contaDAO.deleteConta(id);
         } catch (SQLException e) {
             throw new SQLException("Erro ao excluir conta: " + e.getMessage());
         }

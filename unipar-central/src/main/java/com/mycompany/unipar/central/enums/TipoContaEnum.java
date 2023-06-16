@@ -3,8 +3,13 @@ package com.mycompany.unipar.central.enums;
 public enum TipoContaEnum {
     POUPANCA("Poupança", 1),
     CORRENTE("Corrente", 2),
-    CONTASALARIO("Conta Salário", 3);
+    CONTASALARIO("Conta Salário", 3),
 
+    /**
+     *
+     */
+    TIPO_DESCONHECIDO("tipo de conta invalida",4);
+    
     private String descricao;
     private int id;
 
@@ -12,7 +17,7 @@ public enum TipoContaEnum {
         this.descricao = descricao;
         this.id = id;
     }
-
+    
     public String getDescricao() {
         return descricao;
     }
