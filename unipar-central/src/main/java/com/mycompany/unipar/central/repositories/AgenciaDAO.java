@@ -14,17 +14,18 @@ import java.util.List;
 public class AgenciaDAO {
     private static final String INSERT = "INSERT INTO (CODIGO, DIGITO, RAZAOSOCIAL, CNPJ, RA, BANCO_ID) VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String FIND_ALL = "SELECT ID, CODIGO, DIGITO, RAZAOSOCIAL, CNPJ, RA, BANCO_ID FROM AGENCIA WHERE AGENCIA.ID = ?";
+    private static final String FIND_ALL = "SELECT ID, CODIGO, DIGITO, RAZAOSOCIAL, CNPJ, RA, BANCO_ID FROM AGENCIA";
 
-    private static final String FIND_BY_ID = "SELECT AGENCIA.ID, CODIGO, DIGITO, RAZAOSOCIAL, CNPJ, AGENCIA.RA, BANCO_ID FROM AGENCIA " +
-            "INNER JOIN BANCO b ON (b.id = agencia.banco_id)" +
-            "WHERE AGENCIA.ID = ?";
+    private static final String FIND_BY_ID = "SELECT ID, CODIGO, DIGITO, RAZAOSOCIAL, CNPJ, RA, BANCO_ID FROM AGENCIA " +
+            "WHERE ID = ?";
 
     private static final String DELETE_BY_ID = "DELETE AGENCIA WHERE ID = ?";
 
     private static final String UPDATE = "UPDATE AGENCIA SET CODIGO = ?, DIGITO = ?, RAZAOSOCIAL = ?, CNPJ = ?, RA = ?, BANCO_ID = ? WHERE ID = ?";
 
-    public void insert(Agencia agencia) throws SQLException{
+    private static final String FIND_EXISTE = "SELECT COUNT(*) FROM banco WHERE id = ?";
+
+    public void insert(Agencia agencia, int idBanco) throws SQLException{
 
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -38,7 +39,7 @@ public class AgenciaDAO {
                 pstm.setString(3, agencia.getRazaoSocial());
                 pstm.setString(4, agencia.getCnpj());
                 pstm.setString(5, agencia.getRa());
-                pstm.setInt(6, agencia.getBanco());
+                pstm.setInt(6, idBanco);
             }
         } finally {
             if (conn != null){
@@ -57,14 +58,12 @@ public class AgenciaDAO {
         PreparedStatement pstm = null;
         ResultSet rs = null;
         Agencia agencia = null;
-        Banco banco = null;
 
         try{
+            conn = new DatabaseUtils().getConnection();
+            pstm = conn.prepareStatement(FIND_ALL);
+            rs = pstm.executeQuery();
             while(rs.next()){
-                conn = new DatabaseUtils().getConnection();
-                pstm = conn.prepareStatement(FIND_ALL);
-                rs = pstm.executeQuery();
-
                 agencia = new Agencia();
                 agencia.setId(rs.getInt("ID"));
                 agencia.setCodigo(rs.getString("CODIGO"));
@@ -72,7 +71,7 @@ public class AgenciaDAO {
                 agencia.setRazaoSocial(rs.getString("RAZAOSOCIAL"));
                 agencia.setCnpj(rs.getString("CNPJ"));
                 agencia.setRa(rs.getString("RA"));
-                agencia.setBanco(new BancoDAO().findById(rs.getInt("ID")));
+                agencia.setBanco(rs.getInt("BANCO_ID"));
                 agencias.add(agencia);
             }
         } finally {
@@ -95,27 +94,21 @@ public class AgenciaDAO {
         PreparedStatement pstm = null;
         ResultSet rs = null;
         Agencia agencia = null;
-        Banco banco = null;
 
         try{
+            conn = new DatabaseUtils().getConnection();
+            pstm = conn.prepareStatement(FIND_BY_ID);
+            pstm.setInt(1, id);
+            rs = pstm.executeQuery();
             while(rs.next()){
-
-                if (id != 0){
-                    conn = new DatabaseUtils().getConnection();
-                    pstm = conn.prepareStatement(FIND_BY_ID);
-                    pstm.setInt(1, id);
-                    rs = pstm.executeQuery();
-
-                    agencia = new Agencia();
-                    agencia.setId(rs.getInt("ID"));
-                    agencia.setCodigo(rs.getString("CODIGO"));
-                    agencia.setDigito(rs.getString("DIGITO"));
-                    agencia.setRazaoSocial(rs.getString("RAZAOSOCIAL"));
-                    agencia.setCnpj(rs.getString("CNPJ"));
-                    agencia.setRa(rs.getString("RA"));
-                    agencia.setBanco(new BancoDAO().findById(rs.getInt("ID")));
-                }
-
+                agencia = new Agencia();
+                agencia.setId(rs.getInt("ID"));
+                agencia.setCodigo(rs.getString("CODIGO"));
+                agencia.setDigito(rs.getString("DIGITO"));
+                agencia.setRazaoSocial(rs.getString("RAZAOSOCIAL"));
+                agencia.setCnpj(rs.getString("CNPJ"));
+                agencia.setRa(rs.getString("RA"));
+                agencia.setBanco(rs.getInt("BANCO_ID"));
             }
         } finally {
             if (conn != null){
@@ -128,7 +121,6 @@ public class AgenciaDAO {
                 rs.close();
             }
         }
-
         return agencia;
     }
 
@@ -155,7 +147,7 @@ public class AgenciaDAO {
 
     }
 
-    public void update(Agencia agencia) throws SQLException{
+    public void update(Agencia agencia, int idBanco) throws SQLException{
         Connection conn = null;
         PreparedStatement pstm = null;
 
@@ -167,7 +159,7 @@ public class AgenciaDAO {
             pstm.setString(3, agencia.getRazaoSocial());
             pstm.setString(4, agencia.getCnpj());
             pstm.setString(5, agencia.getRa());
-            pstm.setInt(6, agencia.getBanco());
+            pstm.setInt(6, idBanco);
             pstm.executeUpdate();
 
         } finally {
@@ -179,6 +171,35 @@ public class AgenciaDAO {
                 conn.close();
             }
         }
+    }
+
+    public int findExiste(long id) throws SQLException {
+        int count = 0;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = new DatabaseUtils().getConnection();
+            pstmt = conn.prepareStatement(FIND_EXISTE);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return count;
     }
 
 }

@@ -11,12 +11,12 @@ public class BancoService {
 
     private RAService raService;
 
-    public void TransacaoService(){
+    public BancoService (){
         this.raService = new RAService();
     }
 
-    public void validar (Banco banco) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, ValorInformadoRAException {
-        raService.validarRA(banco.getRa());
+    public void validar (Banco banco) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, ValorInformadoRAException, NaoExisteDatabaseException, SQLException {
+
         if (banco == null){
             throw new EntidadeNaoInformadaException("Banco");
         }
@@ -28,6 +28,7 @@ public class BancoService {
         if (banco.getNome().length() > 120){
             throw new CampoLimiteTamanhoException("Banco(Nome)", "120");
         }
+        raService.validarRA(banco.getRa());
     }
 
     public void insert(Banco banco) throws Exception{
@@ -64,6 +65,7 @@ public class BancoService {
         return listaBanco;
     }
 
+
     public Banco findById(int id) throws Exception{
         if(id <= 0)
             throw  new CampoLimiteTamanhoException("id","1");
@@ -74,6 +76,14 @@ public class BancoService {
             throw new FindRetornadoException("Banco");
         }
         return retorno;
+    }
+
+    public int findExiste (int id) throws Exception {
+        if(id <= 0)
+            throw  new CampoLimiteTamanhoException("id","1");
+        BancoDAO bancoDAO = new BancoDAO();
+        int count = bancoDAO.findExiste(id);
+        return count;
     }
 
 }
