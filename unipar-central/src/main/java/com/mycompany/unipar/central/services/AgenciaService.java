@@ -3,6 +3,8 @@ package com.mycompany.unipar.central.services;
 import com.mycompany.unipar.central.exceptions.*;
 import com.mycompany.unipar.central.models.Agencia;
 import com.mycompany.unipar.central.models.Banco;
+import com.mycompany.unipar.central.repositories.AgenciaDAO;
+import com.mycompany.unipar.central.repositories.BancoDAO;
 import com.mycompany.unipar.central.utils.db.ValidadorCampoNumerico;
 import com.mycompany.unipar.central.utils.db.ValidatorExisteDatabase;
 
@@ -11,8 +13,6 @@ import java.sql.SQLException;
 public class AgenciaService {
 
     public void validar (Agencia agencia) throws CampoNaoInformadoException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, IdIgualZeroException, IdMenorZeroException, CampoNumericoInvalidoException, SQLException, NaoExisteDatabaseException {
-
-        Banco banco = new Banco();
 
         if (agencia == null){
             throw new EntidadeNaoInformadaException("agencia");
@@ -79,10 +79,35 @@ public class AgenciaService {
             throw new CampoLimiteTamanhoException("agencia(RA)", "8");
         }
 
-        if (!ValidatorExisteDatabase.existeBanco(banco.getId())){
+        if (!ValidatorExisteDatabase.existeBanco(agencia.getId())){
             throw new NaoExisteDatabaseException("agencia(Banco_id)", "Banco");
         }
 
+    }
+
+    public void insert(Agencia agencia) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
+        validar(agencia);
+        AgenciaDAO agenciaDAO = new AgenciaDAO();
+        agenciaDAO.insert(agencia);
+    }
+
+    public void update(Agencia agencia) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, NaoExisteDatabaseException, Exception{
+        validar(agencia);
+        AgenciaDAO agenciaDAO = new AgenciaDAO();
+        Agencia agenciaExistente = agenciaDAO.FIND_BY_ID(agencia.getId());
+        if (agenciaExistente == null) {
+            throw new NaoExisteDatabaseException("ID", "Banco");
+        }
+        agenciaDAO.;
+    }
+
+    public void delete(int id) throws SQLException, Exception{
+        AgenciaDAO agenciaDAO = new AgenciaDAO();
+        Agencia agenciaExistente = agenciaDAO.FIND_BY_ID(id);
+        if (agenciaExistente == null) {
+            throw new NaoExisteDatabaseException("ID", "Agencia");
+        }
+        agenciaDAO.delete(id);
     }
 
 
