@@ -27,8 +27,8 @@ public class TelefoneService {
             throw new CampoNaoInformadoException(("Telefone(Numero)"));
         }
 
-        if (telefone.getNumero().length() > 9){
-            throw new CampoLimiteTamanhoException("Telefone(Numero)", "9");
+        if (telefone.getNumero().length() > 11){
+            throw new CampoLimiteTamanhoException("Telefone(Numero)", "11");
         }
     }
 

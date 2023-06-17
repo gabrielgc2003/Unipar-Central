@@ -116,7 +116,7 @@ public class PessoaJuridicaDAO {
 
         try {
             conn = new DatabaseUtils().getConnection();
-            conn.prepareStatement(INSERT);
+            pstmt = conn.prepareStatement(INSERT);
             pstmt.setString(1, pessoaJuridica.getRazaoSocial());
             pstmt.setString(2, pessoaJuridica.getCnpj());
             pstmt.setString(3, pessoaJuridica.getCnaePrincipal());

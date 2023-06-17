@@ -17,16 +17,16 @@ import java.util.List;
  * @author gabri
  */
 public class CidadeDAO {
-    private static final String INSERT = "INSERT INTO CIDADE (ID, NOME, RA)"
-                                        +"VALUES (?, ?, ?)";
+    private static final String INSERT = "INSERT INTO CIDADE (ID, NOME, RA, ESTADO_ID)"
+                                        +"VALUES (?, ?, ?, ?)";
     
-    private static final String FIND_ALL = "SELECT ID, NOME, RA FROM CIDADE";
+    private static final String FIND_ALL = "SELECT ID, NOME, RA, ESTADO_ID FROM CIDADE";
     
-    private static final String FIND_BY_ID = "SELECT ID, NOME, RA FROM CIDADE "
-            + "WHERE ID = ? AND NOME = ?, RA = ?";
+    private static final String FIND_BY_ID = "SELECT ID, NOME, RA, ESTADO_ID FROM CIDADE "
+            + "WHERE ID = ?";
     
     private static final String DELETE_BY_ID = "DELETE FROM CIDADE WHERE "
-            + "ID = ? AND NOME = ?, RA = ?";
+            + "ID = ?";
     
     private static final String UPDATE = "UPDATE CIDADE SET ID = ?, NOME = ?, RA = ?"
             + "WHERE ID = ? AND NOME = ?, RA = ? ESTADO_ID = ? WHERE ID = ?";
@@ -47,6 +47,7 @@ public class CidadeDAO {
                 cidade.setId(rs.getInt("ID"));
                 cidade.setNome(rs.getString("NOME"));
                 cidade.setRa(rs.getString("RA"));
+                cidade.setEstado(new EstadoDAO().findById(rs.getInt("ESTADO_ID")));
                 retorno.add(cidade);
             }
         } finally {
@@ -82,8 +83,7 @@ public class CidadeDAO {
                 retorno.setId(rs.getInt("ID"));
                 retorno.setRa(rs.getString("RA"));
                 retorno.setNome(rs.getString("NOME"));
-                retorno.setEstado(new EstadoDAO().findById(
-                        rs.getInt("ESTADO_ID")));
+                retorno.setEstado(new EstadoDAO().findById(rs.getInt("ESTADO_ID")));
                 
             }
         } finally {

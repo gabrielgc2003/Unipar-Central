@@ -151,24 +151,20 @@ public class TelefoneDAO {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
-            if (idPessoa != 0){
-                conn = new DatabaseUtils().getConnection();
-                conn.prepareStatement(INSERT);
-                pstmt.setString(1, telefone.getNumero());
-                pstmt.setInt(2, telefone.getOperadoraEnum().getCodigo());
-                pstmt.setString(3, telefone.getRa());
-                pstmt.setInt(5, idPessoa);
-                pstmt.executeUpdate();
-            }
-            if (idAgencia != 0) {
-                conn = new DatabaseUtils().getConnection();
-                conn.prepareStatement(INSERT);
-                pstmt.setString(1, telefone.getNumero());
-                pstmt.setInt(2, telefone.getOperadoraEnum().getCodigo());
-                pstmt.setString(3, telefone.getRa());
+            conn = new DatabaseUtils().getConnection();
+            pstmt = conn.prepareStatement(INSERT);
+            pstmt.setString(1, telefone.getNumero());
+            pstmt.setInt(2, telefone.getOperadoraEnum().getCodigo());
+            pstmt.setString(3, telefone.getRa());
+            if (idAgencia != 0 ) {
                 pstmt.setInt(4, idAgencia);
-                pstmt.executeUpdate();
+                pstmt.setNull(5, Types.INTEGER);
             }
+            if (idPessoa != 0){
+                pstmt.setNull(4, Types.INTEGER);
+                pstmt.setInt(5, idPessoa);
+            }
+            pstmt.executeUpdate();
 
         } finally {
 
@@ -187,26 +183,21 @@ public class TelefoneDAO {
         PreparedStatement pstmt = null;
 
         try {
-            if (idPessoa != 0) {
-                conn = new DatabaseUtils().getConnection();
-                pstmt = conn.prepareStatement(UPDATE);
-                pstmt.setString(1, telefone.getNumero());
-                pstmt.setInt(2, telefone.getOperadoraEnum().getCodigo());
-                pstmt.setString(3, telefone.getRa());
-                pstmt.setInt(5, idPessoa);
-                pstmt.setInt(6, telefone.getId());
-                pstmt.executeUpdate();
-            }
-            if (idAgencia != 0) {
-                conn = new DatabaseUtils().getConnection();
-                pstmt = conn.prepareStatement(UPDATE);
-                pstmt.setString(1, telefone.getNumero());
-                pstmt.setInt(2, telefone.getOperadoraEnum().getCodigo());
-                pstmt.setString(3, telefone.getRa());
+            conn = new DatabaseUtils().getConnection();
+            pstmt = conn.prepareStatement(UPDATE);
+            pstmt.setString(1, telefone.getNumero());
+            pstmt.setInt(2, telefone.getOperadoraEnum().getCodigo());
+            pstmt.setString(3, telefone.getRa());
+            if (idAgencia != 0 ) {
                 pstmt.setInt(4, idAgencia);
-                pstmt.setInt(6, telefone.getId());
-                pstmt.executeUpdate();
+                pstmt.setNull(5, Types.INTEGER);
             }
+            if (idPessoa != 0){
+                pstmt.setNull(4, Types.INTEGER);
+                pstmt.setInt(5, idPessoa);
+            }
+            pstmt.executeUpdate();
+
 
         } finally {
             if (pstmt != null) {
