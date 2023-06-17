@@ -24,60 +24,9 @@ import java.util.List;
 public class UniparCentral {
 
     public static void main(String[] args) throws Exception {
-      /*  //Find_All
-        try {
-            PaisService paisService = new PaisService();
-            List<Pais> listaPais = paisService.findAll();
-            System.out.println(listaPais.toString());
-        } catch (Exception e) {
-           JOptionPane.showMessageDialog(null, e.getMessage());
-        }
 
-        //Find_By_Id
-        try {
-            PaisService paisService = new PaisService();
-            Pais pais = paisService.findById(3999);
-            System.out.println(pais.toString());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-
-        //Insert
-        try {
-            PaisService paisService = new PaisService();
-            Pais pais = new Pais();
-            pais.setId(3999);
-            pais.setRa("00240526");
-            pais.setSigla("JP");
-            pais.setNome("Japão");
-            paisService.insert(pais);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-
-        //Update
-        try {
-            PaisService paisService = new PaisService();
-            Pais pais = new Pais();
-            pais.setId(3999);
-            pais.setRa("00240526");
-            pais.setSigla("JP");
-            pais.setNome("Japão");
-            paisService.update(pais);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-
-        //Delete
-        try {
-            PaisService paisService = new PaisService();
-            paisService.delete(3999);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-
-
-*/
+        /*Teste de Pessoa*/
+        /*
         ArrayList<Endereco> listaEndereco = new ArrayList<>();
         Endereco endereco1 = new Endereco();
         endereco1.setRa("00240526");
@@ -138,6 +87,8 @@ public class UniparCentral {
 
         PessoaService pessoaService = new PessoaService();
         pessoaService.insert(pessoa, null, pessoaJuridica);
+        */
+
 
     }
 }
