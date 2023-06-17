@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PessoaDAO {
-    private static final String INSERT = "INSERT INTO PESSOA(ID, EMAIL, RA)" +
-            "VALUES (?, ?, ?)";
+    private static final String INSERT = "INSERT INTO PESSOA(EMAIL, RA)" +
+            "VALUES (?, ?)";
 
     private static final String FIND_ALL = "SELECT ID, EMAIL, RA FROM PESSOA";
     private static final String FIND_BY_ID = "SELECT ID, EMAIL, RA FROM PESSOA WHERE ID = ?";
@@ -91,18 +91,18 @@ public class PessoaDAO {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+        int retorno = 0;
 
         try {
             conn = new DatabaseUtils().getConnection();
             pstmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, pessoa.getId());
-            pstmt.setString(2, pessoa.getEmail());
-            pstmt.setString(3, pessoa.getRa());
+            pstmt.setString(1, pessoa.getEmail());
+            pstmt.setString(2, pessoa.getRa());
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
-
-            return rs.getInt(0);
-
+            while(rs.next()) {
+                retorno = rs.getInt(1);
+            }
 
         } finally {
             if (rs != null) {
@@ -117,6 +117,7 @@ public class PessoaDAO {
                 conn.close();
             }
         }
+        return retorno;
     }
 
     public void update(Pessoa pessoa) throws SQLException{
@@ -128,7 +129,6 @@ public class PessoaDAO {
             pstmt = conn.prepareStatement(UPDATE);
             pstmt.setString(1, pessoa.getEmail());
             pstmt.setString(2, pessoa.getRa());
-            pstmt.setInt(3, pessoa.getId());
             pstmt.executeUpdate();
 
 

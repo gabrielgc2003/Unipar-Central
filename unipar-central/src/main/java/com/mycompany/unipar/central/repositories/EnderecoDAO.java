@@ -43,8 +43,8 @@ public class EnderecoDAO {
                                           + "PESSOA_ID = ? AND CIDADE_ID = ?"
                                           + "WHERE ID = ? AND LOGRADOURO = ? "
                                           + "AND NUMERO = ? AND BAIRRO = ? AND "
-                                          + "CEP = ? AND COMPLEMENTO = ? AND RA = ? AND "
-                                          + "PESSOA_ID = ? AND CIDADE_ID = ?";
+                                          + "CEP = ? AND COMPLEMENTO = ? AND RA = ? " +
+                                          " AND CIDADE_ID = ?";
     
     public List<Endereco> findAll() throws SQLException{
         ArrayList<Endereco> retorno = new ArrayList<>();
@@ -138,13 +138,13 @@ public class EnderecoDAO {
             pstmt = conn.prepareStatement(INSERT);
             pstmt.setString(1, endereco.getLogradouro());
             pstmt.setString(2, endereco.getNumero());
-            pstmt.setString(3, endereco.getCep());
-            pstmt.setString(4, endereco.getBairro());
-            pstmt.setString(5, endereco.getCep());
-            pstmt.setString(6, endereco.getComplemento());
-            pstmt.setString(7, endereco.getRa());
+            pstmt.setString(3, endereco.getBairro());
+            pstmt.setString(4, endereco.getCep());
+            pstmt.setString(5, endereco.getComplemento());
+            pstmt.setString(6 ,endereco.getRa());
+            pstmt.setInt(7 , idPessoa);
+            pstmt.setInt(8, endereco.getCidade().getId());
             pstmt.executeUpdate();
-
 
         } finally {
             if (pstmt != null) {
@@ -167,11 +167,11 @@ public class EnderecoDAO {
             pstmt = conn.prepareStatement(UPDATE);
             pstmt.setString(1, endereco.getLogradouro());
             pstmt.setString(2, endereco.getNumero());
-            pstmt.setString(3, endereco.getCep());
-            pstmt.setString(4, endereco.getBairro());
-            pstmt.setString(5, endereco.getCep());
-            pstmt.setString(6, endereco.getComplemento());
-            pstmt.setString(7, endereco.getRa());
+            pstmt.setString(3, endereco.getBairro());
+            pstmt.setString(4, endereco.getCep());
+            pstmt.setString(5, endereco.getComplemento());
+            pstmt.setString(6 ,endereco.getRa());
+            pstmt.setInt(7, endereco.getCidade().getId());
             pstmt.executeUpdate();
 
 

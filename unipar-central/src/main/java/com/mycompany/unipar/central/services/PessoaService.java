@@ -64,33 +64,38 @@ public class PessoaService {
         pessoaDAO.delete(id);
     }
 
-    public void insert(Pessoa pessoa, PessoaFisica pessoaFisica, PessoaJuridica pessoaJuridica, ArrayList<Endereco> listaEndereco, ArrayList<Telefone> listaTelefone) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
+    public void insert(Pessoa pessoa, PessoaFisica pessoaFisica, PessoaJuridica pessoaJuridica/*, ArrayList<Endereco> listaEndereco, ArrayList<Telefone> listaTelefone*/) throws SQLException, CampoLimiteTamanhoException, EntidadeNaoInformadaException, Exception{
 
         int idPessoa;
         validar(pessoa);
+        System.out.println("Inserindo Pessoa");
         PessoaDAO pessoaDAO = new PessoaDAO();
         idPessoa = pessoaDAO.insert(pessoa);
+        System.out.println(idPessoa);
 
         if (pessoaFisica != null){
             PessoaFisicaService pessoaFisicaService = new PessoaFisicaService();
             pessoaFisicaService.insert(pessoaFisica, idPessoa);
         }
         if (pessoaJuridica != null){
+            System.out.println("Inserindo Pessoa Juridica");
             PessoaJuridicaService pessoaJuridicaService = new PessoaJuridicaService();
             pessoaJuridicaService.insert(pessoaJuridica, idPessoa);
         }
 
-        if (!listaEndereco.isEmpty()) {
-            for (int i = 0; i < listaEndereco.size(); i++) {
+        if (!pessoa.getListaEndereco().isEmpty()) {
+            for (int i = 0; i < pessoa.getListaEndereco().size(); i++) {
+                System.out.println("Inserindo endereco " + (i+1));
                 EnderecoService enderecoService = new EnderecoService();
-                enderecoService.insert(listaEndereco.get(i), idPessoa);
+                enderecoService.insert(pessoa.getListaEndereco().get(i), idPessoa);
             }
         }
 
-        if (!listaTelefone.isEmpty()) {
-            for (int i = 0; i < listaTelefone.size(); i++) {
+        if (!pessoa.getListaTelefone().isEmpty()) {
+            for (int i = 0; i < pessoa.getListaTelefone().size(); i++) {
+                System.out.println("Inserindo telefone " + (i+1));
                 TelefoneService telefoneService = new TelefoneService();
-                telefoneService.insert(listaTelefone.get(i), idPessoa, 0);
+                telefoneService.insert(pessoa.getListaTelefone().get(i), idPessoa, 0);
             }
         }
 

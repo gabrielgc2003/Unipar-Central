@@ -117,7 +117,7 @@ public class PessoaFisicaDAO {
 
         try {
             conn = new DatabaseUtils().getConnection();
-            conn.prepareStatement(INSERT);
+            pstmt = conn.prepareStatement(INSERT);
             pstmt.setString(1, pessoaFisica.getNome());
             pstmt.setString(2, pessoaFisica.getCpf());
             pstmt.setString(3, pessoaFisica.getRg());
